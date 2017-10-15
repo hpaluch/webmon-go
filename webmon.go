@@ -42,25 +42,25 @@ var (
 	tplFn = template.FuncMap{
 		"CzDateFormat":        tplCzDateStr,
 		"CzDateFormatWithAgo": tplCzDateStrWithAgo,
-		"DurationMs":	tplDurationMs,
+		"DurationMs":          tplDurationMs,
 	}
 
 	// from: https://github.com/golang/appengine/blob/master/demos/guestbook/guestbook.go
 	tpl = template.Must(template.New("").Funcs(tplFn).ParseGlob("templates/*.html"))
 
-	str_mon_urls   = os.Getenv("MON_URLS")
+	str_mon_urls = os.Getenv("MON_URLS")
 	// initialized in init()
 	mon_urls []string
 )
 
 type WebData struct {
-	Url string
+	Url     string
 	Results []wmmon.MonResult
 }
 
 type ListModel struct {
 	LayoutModel wmutils.LayoutModel
-	WebData []WebData
+	WebData     []WebData
 }
 
 func handlerList(w http.ResponseWriter, r *http.Request) {
@@ -80,8 +80,8 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	webData := make([]WebData,len(mon_urls))
-	for i,url := range mon_urls {
+	webData := make([]WebData, len(mon_urls))
+	for i, url := range mon_urls {
 
 		var entityKind = wmmon.EntityKind(url)
 		q := datastore.NewQuery(entityKind).Order("-When").Limit(100)
@@ -89,19 +89,18 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 		var _, err = q.GetAll(ctx, &results)
 		if err != nil {
 			ctx.Errorf("Error fetchhing entities for '%s': %v",
-				url,err)
+				url, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 
 		}
 
 		var wd = WebData{
-			Url: url,
+			Url:     url,
 			Results: results,
 		}
-		webData [i] = wd
+		webData[i] = wd
 	}
-
 
 	layoutModel, err := wmutils.CreateLayoutModel(tic, fmt.Sprintf("WebMon - Web monitor in Go"), ctx, r)
 	if err != nil {
@@ -110,7 +109,7 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 	}
 	listModel := ListModel{
 		LayoutModel: layoutModel,
-		WebData: webData,
+		WebData:     webData,
 	}
 
 	if err := tpl.ExecuteTemplate(w, "home.html", listModel); err != nil {
@@ -140,24 +139,24 @@ func handlerCron(w http.ResponseWriter, r *http.Request) {
 		var cronHeader = r.Header.Get("X-Appengine-Cron")
 		if cronHeader == "" {
 			w.WriteHeader(http.StatusForbidden)
-			fmt.Fprintf(w,"Can be invoked from Cron only")
+			fmt.Fprintf(w, "Can be invoked from Cron only")
 			return
 		}
 	}
 
 	var txt = ""
 	// our Cron job - monitor urls
-	for _,url := range mon_urls {
-		result,err := wmmon.MonitorAndStoreUrl(ctx,url)
+	for _, url := range mon_urls {
+		result, err := wmmon.MonitorAndStoreUrl(ctx, url)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		txt += fmt.Sprintf("Succes on %v\r\n",result)
+		txt += fmt.Sprintf("Succes on %v\r\n", result)
 	}
 	txt += fmt.Sprintf("Job finished in %v\r\n", time.Since(tic))
-	w.Header().Set("Content-Type","text/plain; charset=UTF-8")
-	fmt.Fprintf(w,"%s",txt)
+	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+	fmt.Fprintf(w, "%s", txt)
 
 }
 

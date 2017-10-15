@@ -14,17 +14,17 @@ func RoundDurationToMs(d time.Duration) time.Duration {
 
 // data model for templates/zz_layout.html
 type LayoutModel struct {
-	NowUTC         time.Time
-	RenderTime     time.Duration
-	Title          string
+	NowUTC     time.Time
+	RenderTime time.Duration
+	Title      string
 }
 
 func CreateLayoutModel(tic time.Time, title string, ctx appengine.Context, r *http.Request) (LayoutModel, error) {
 
 	return LayoutModel{
-		NowUTC:         time.Now(),
-		RenderTime:     time.Since(tic),
-		Title:          title,
+		NowUTC:     time.Now(),
+		RenderTime: time.Since(tic),
+		Title:      title,
 	}, nil
 }
 
@@ -48,4 +48,3 @@ func NoCacheHeaders(w http.ResponseWriter) {
 	w.Header().Set("Pragma", "no-cache")
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 }
-
