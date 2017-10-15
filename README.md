@@ -104,6 +104,12 @@ Create new application in GAE Dashboard:
   ```bash
   ./run_dev.sh
   ```
+* to gather monitoring data (and see results), run cron task using:
+
+  ```bash
+  ./run_cron_dev.sh
+  ```
+
 * and go to URL: http://localhost:8080/
 * to view cute Admin interface (something like "Dashboard Lite")
   use: http://localhost:8000
