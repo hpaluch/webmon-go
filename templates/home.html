@@ -1,0 +1,11 @@
+{{template "header" .LayoutModel }}
+
+{{ range .WebData }}
+ <h2>Results for <a href="{{ .Url }}" target="monitored">{{ .Url }}</a></h2>
+
+ TODO
+
+{{ end }}
+
+
+{{template "footer" .LayoutModel }}

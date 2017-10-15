@@ -1,0 +1,232 @@
+{{define "header"}}
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{{ .Title }}</title>
+  <link rel="shortcut icon" href="/favicon.ico" size="32x32" >
+  <style>
+	/* yui2 */
+	html { color: #000 }
+	body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+	    margin: 0;
+	    padding: 0;
+	}
+	body { background: #fff; text-align: left;
+               font: 13px/1.231 arial,helvetica,clean,sans-serif;}
+
+	address, caption, cite, code, dfn, em, strong, th, var {
+	    font-style: normal;
+	    font-weight: normal;
+	}
+
+	p {
+	    margin-bottom: 1em;
+	}
+
+	h1, h2, h3, h4, h5, h6, p {
+		line-height: 1.2em;
+		font-size: 100%;
+		margin: 1em 0 0 0;
+	}
+
+	h2 {
+	    font-size: 110%;
+	    margin-top: 1.5em;
+	    margin-bottom: .2em;
+	    padding: 1em 0 0 0;
+	    border-top: 1px dashed #C3D2DC;
+	}
+
+
+	h1, h2, h3, h4, h5, h6 {
+	    font-weight: bold;
+	    color: #E76300;
+	}
+
+	h2:first-child {
+		border-top: 0;
+		margin-top: 0;
+		padding-top: 0;
+	}
+
+	#ygunav {
+	    overflow: visible !important;
+		background: #eee;
+		border-bottom: 2px solid #ccc;
+		padding: 0 10px;
+		font-size: 78%;
+		text-align: right;
+		margin-bottom: 6px;
+		height: 2.5em;
+		line-height: 2.5em;
+	}
+
+	#ygunav p {
+	    display: inline;
+	}
+	
+	#ygunav p em {
+	    float: left;
+	    text-align: left;
+	    font-style: normal;
+	    padding-top: .7em;
+	}
+
+	#ygunav p em a {
+		padding: 0 0.7em 0 0.7em;
+		border-right: 1px solid #000;
+        }
+	#ygunav p em a:last-child {
+		border: 0px;
+        }
+
+	#pagetitle {
+		background: url('/static/yui/bg_hd.gif') 0 0 repeat-x #B6CDE1;
+		border: 1px solid #93B2CC;
+	}
+	#pagetitle h1 {
+		color: #000;
+		text-indent: 15px;
+		margin: 0;
+		padding: 4px 0 2px 0;
+		color: #000;
+		font-size: 120%;
+		font-weight: bold;
+		position: relative;
+		left: -1px;
+		top: -1px;
+		margin-right: -2px;
+	}
+
+	#bd, #footer {
+		padding-top: 1em;
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+
+	 table {
+	    font-family: arial;
+	    font-size: inherit;
+	    border-collapse: separate;
+	    border-spacing: 0;
+	    border: 1px solid #7f7f7f;
+	}
+
+	thead {
+	    border-spacing: 0;
+	}
+
+	th {
+		border: 0;
+		border-right-width: 0px;
+		border-right-style: none;
+		border-right-color: currentcolor;
+		border-right: 1px solid #cbcbcb;
+		font-weight: normal;
+		vertical-align: bottom;
+		background: #d8d8da url('/static/yui/sprite.png') repeat-x 0 0;
+	}
+
+	tr.yui-dt-even,
+        tr:nth-child(even) {
+	    background-color: #FFF;
+	}
+
+	tr.yui-dt-odd,
+        tr:nth-child(odd)  {
+	    background-color: #edf5ff;
+	}
+
+	tr.yui-dt-first td,
+        tr:first-child td {
+	    border-top: 1px solid #7f7f7f;
+	}
+
+	td {
+		border: 0;
+		border-top-width: 0px;
+		border-right-width: 0px;
+		border-top-style: none;
+		border-right-style: none;
+		border-top-color: currentcolor;
+		border-right-color: currentcolor;
+		border-right: 1px solid #cbcbcb;
+	}
+
+	td, th {
+		padding: 4px 10px 4px 10px;
+	}
+
+
+	img { border: 0 }
+	#footer img { vertical-align: middle }
+        #footer span { float: right; }
+	hr { color: #aaa; }
+	.small { font-size: x-small; }
+        .no-float { clear: both; }
+	div.menu { margin-left: 1em; }
+	a, a:visited { color: #000 }
+	a:hover { color: #fff; background: #000 }
+	a.with-img { text-decoration: none; }
+	a:hover.with-img { color: #000; background: none; }
+	a img { vertical-align: middle; }
+
+	/* these button styles come from Skeleton,
+           see http://getskeleton.com/ */
+	.button.button-primary { color: #FFF; background-color: #33C3F0; border-color: #33C3F0; }
+	.button {
+	    margin-bottom: 1rem;
+	    display: inline-block;
+	    height: 38px;
+	    padding: 0 30px;
+	    color: #555;
+	    text-align: center;
+	    font-size: 11px;
+	    font-weight: 600;
+	    line-height: 38px;
+	    text-decoration: none;
+	    white-space: nowrap;
+	    background-color: transparent;
+	    border-radius: 4px;
+	    border: 1px solid #bbb;
+	    cursor: pointer;
+	    box-sizing: border-box;
+	}
+
+  </style>
+ </head>
+ <body>
+  <div id="hd">
+	<div id="ygunav">
+	<p>Now is: <span title="{{ .NowUTC.Format "02.01.2006 15:04:05 MST"}}">{{ ZoCzDateFormat .NowUTC }}</span>
+          <em>
+	   <a href="/">WebMon Go</a>
+          </em>
+        </p>
+	</div>
+	<div id="pagetitle">
+		<h1>{{ .Title }}</h1>
+	</div>
+  </div>
+  <div id="bd">
+{{ end }} <!-- /header -->
+
+{{ define "footer" }}
+  </div><!-- /bd -->
+  <hr noshade size="1">
+  <div id="footer">
+   <p>See <a href="https://github.com/hpaluch/webmon-go"
+           class="button button-primary" target="github">Source on GitHub!</a>
+   <span>Powered by <a href="https://golang.org/"
+                 title="Go language" target="go"><img src="/static/golang.png" alt="Go language" ></a>
+   <a href="https://cloud.google.com/appengine/docs/"
+      title="Google Application Engine (GAE)" target="gae"><img src='/static/appengine-silver-120x30.gif' alt='GAE' ></a></span>
+   </p>
+   <div class="no-float"></div>
+   <p class="small">Render Time: {{ .RenderTime }}</p>
+  </div>
+ </body>
+</html>
+{{ end }} <!-- /footer -->
