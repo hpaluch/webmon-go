@@ -11,6 +11,7 @@ import (
 
 	"appengine"
 
+	"github.com/hpaluch/webmon-go/wm/wmmon"
 	"github.com/hpaluch/webmon-go/wm/wmutils"
 )
 
@@ -18,6 +19,10 @@ var CzechLocation *time.Location
 
 func tplCzDateStr(timeArg time.Time) string {
 	return timeArg.In(CzechLocation).Format("02.01.2006 15:04:05 MST")
+}
+
+func tplDurationMs(d time.Duration) string {
+	return wmutils.RoundDurationToMs(d).String()
 }
 
 func tplCzDateStrWithAgo(timeArg time.Time) string {
@@ -34,8 +39,9 @@ func tplCzDateStrWithAgo(timeArg time.Time) string {
 
 var (
 	tplFn = template.FuncMap{
-		"ZoCzDateFormat":        tplCzDateStr,
-		"ZoCzDateFormatWithAgo": tplCzDateStrWithAgo,
+		"CzDateFormat":        tplCzDateStr,
+		"CzDateFormatWithAgo": tplCzDateStrWithAgo,
+		"DurationMs":	tplDurationMs,
 	}
 
 	// from: https://github.com/golang/appengine/blob/master/demos/guestbook/guestbook.go
@@ -48,6 +54,7 @@ var (
 
 type WebData struct {
 	Url string
+	Results []wmmon.MonResult
 }
 
 type ListModel struct {
@@ -74,8 +81,15 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 
 	webData := make([]WebData,len(mon_urls))
 	for i,url := range mon_urls {
+
+		// in future this will be list of records from database
+		var results = make([]wmmon.MonResult,1)
+
+		results[0] = wmmon.MonitorUrl(ctx,url)
+
 		var wd = WebData{
 			Url: url,
+			Results: results,
 		}
 		webData [i] = wd
 	}

@@ -200,7 +200,7 @@
  <body>
   <div id="hd">
 	<div id="ygunav">
-	<p>Now is: <span title="{{ .NowUTC.Format "02.01.2006 15:04:05 MST"}}">{{ ZoCzDateFormat .NowUTC }}</span>
+	<p>Now is: <span title="{{ .NowUTC.Format "02.01.2006 15:04:05 MST"}}">{{ CzDateFormat .NowUTC }}</span>
           <em>
 	   <a href="/">WebMon Go</a>
           </em>
@@ -225,7 +225,7 @@
       title="Google Application Engine (GAE)" target="gae"><img src='/static/appengine-silver-120x30.gif' alt='GAE' ></a></span>
    </p>
    <div class="no-float"></div>
-   <p class="small">Render Time: {{ .RenderTime }}</p>
+   <p class="small">Render Time: {{ DurationMs .RenderTime }}</p>
   </div>
  </body>
 </html>

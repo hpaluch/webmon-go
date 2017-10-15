@@ -15,7 +15,7 @@ func RoundDurationToMs(d time.Duration) time.Duration {
 // data model for templates/zz_layout.html
 type LayoutModel struct {
 	NowUTC         time.Time
-	RenderTime     string
+	RenderTime     time.Duration
 	Title          string
 }
 
@@ -23,7 +23,7 @@ func CreateLayoutModel(tic time.Time, title string, ctx appengine.Context, r *ht
 
 	return LayoutModel{
 		NowUTC:         time.Now(),
-		RenderTime:     RoundDurationToMs(time.Since(tic)).String(),
+		RenderTime:     time.Since(tic),
 		Title:          title,
 	}, nil
 }

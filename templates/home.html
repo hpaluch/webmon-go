@@ -2,9 +2,19 @@
 
 {{ range .WebData }}
  <h2>Results for <a href="{{ .Url }}" target="monitored">{{ .Url }}</a></h2>
-
- TODO
-
+ <table>
+  <thead>
+   <tr><th>Date</th><th>Latency</th><th>Error</th><th>Http Status</th><th>Length</th></tr>
+  </thead>
+  <tbody>
+    {{ range .Results }}
+      <tr>
+       <td>{{ CzDateFormat .When }}</td><td>{{ DurationMs .Latency }}</td><td>{{ .Err }}</td>
+       <td>{{ .StatusCode }}</td><td>{{ .Length }}</td>
+      </tr>
+    {{ end }}
+  </tbody>
+ </table> 
 {{ end }}
 
 
