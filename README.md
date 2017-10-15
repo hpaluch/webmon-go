@@ -89,6 +89,13 @@ Create new application in GAE Dashboard:
 
 ## Developing app
 
+* you can define your own list of monitored apps defining
+  environment variable in your shell, for example:
+  
+  ```bash
+  export MON_URLS="https://www.google.com https://www.cnn.com"
+  ```
+
 * to run this app locally use:
 
   ```bash
@@ -145,7 +152,7 @@ And finally:
   ./deploy.sh
   ```
 
-# Mis tips
+# Misc tips
 
 How to view traces:
 
