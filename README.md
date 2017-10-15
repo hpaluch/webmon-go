@@ -5,7 +5,10 @@ of your web pages.
 
 The app is written in Go for GAE.
 
-> WARNING! Work in progress - currently just skeleton
+> WARNING! Basic function (including monitoring with cron job) implemented.
+>
+> NOTE: Monitored Url are configurable at Deployment Time
+> (using shell variable `WEBMON_APP_ID`)
 >
 > Live demo is available at: https://hp-webmon.appspot.com/
 >
