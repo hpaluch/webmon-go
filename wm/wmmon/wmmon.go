@@ -37,8 +37,8 @@ func MonitorUrl(ctx appengine.Context, url string) MonResult {
 	var client = urlfetch.Client(ctx)
 
 	var tic = time.Now()
-        // timeout code from: https://stackoverflow.com/a/25344458
-	var timeout = time.Duration( wmconsts.FetchTimeoutSecs * time.Second)
+	// timeout code from: https://stackoverflow.com/a/25344458
+	var timeout = time.Duration(wmconsts.FetchTimeoutSecs * time.Second)
 	client.Timeout = timeout
 	resp, err := client.Get(url)
 	res.StatusCode = resp.StatusCode
