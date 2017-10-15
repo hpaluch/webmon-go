@@ -34,7 +34,13 @@ then
 fi
 set -x
 gcloud app deploy
-gcloud app deploy cron.yaml
+set +x
+for t in cron.yaml queue.yaml
+do
+	set -x
+	gcloud app deploy $t
+	set +x
+done
 # please ignore "skipped"/"copied" messages before deployment
 # they have nothing common with Upload filter...
 #gcloud app deploy --verbosity=info
