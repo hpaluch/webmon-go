@@ -140,6 +140,7 @@ func handlerCron(w http.ResponseWriter, r *http.Request) {
 		var cronHeader = r.Header.Get("X-Appengine-Cron")
 		if cronHeader == "" {
 			w.WriteHeader(http.StatusForbidden)
+			fmt.Fprintf(w,"Can be invoked from Cron only")
 			return
 		}
 	}
