@@ -3,12 +3,12 @@
 Here is a simple application to monitor latency and or errors
 of your web pages.
 
-The app is written in Go for GAE.
+The app is written in [Go](https://golang.org/) for [GAE](https://cloud.google.com/appengine/docs/standard/go/runtime).
 
-> WARNING! Basic function (including monitoring with cron job) implemented.
+> STATUS: Basic functionality (including monitoring with cron job) implemented.
 >
-> NOTE: Monitored Url are configurable at Deployment Time
-> (using shell variable `WEBMON_APP_ID`)
+> NOTE: Monitored Urls are configurable at Deployment Time
+> (using shell variable `MON_URLS`)
 >
 > Live demo is available at: https://hp-webmon.appspot.com/
 >
