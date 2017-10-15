@@ -135,6 +135,15 @@ func handlerCron(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// for Production verify that it is called by cron
+	if !appengine.IsDevAppServer() {
+		var cronHeader = r.Header.Get("X-Appengine-Cron")
+		if cronHeader == "" {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+	}
+
 	var txt = ""
 	// our Cron job - monitor urls
 	for _,url := range mon_urls {
