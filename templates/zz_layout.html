@@ -225,7 +225,7 @@
       title="Google Application Engine (GAE)" target="gae"><img src='/static/appengine-silver-120x30.gif' alt='GAE' ></a></span>
    </p>
    <div class="no-float"></div>
-   <p class="small">Render Time: {{ DurationMs .RenderTime }}</p>
+   <p class="small">Updated on: {{ CzDateFormat .NowUTC }} <br> Render Time: {{ DurationMs .RenderTime }}</p>
   </div>
  </body>
 </html>
