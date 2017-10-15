@@ -11,6 +11,9 @@ handlers:
   upload: static/favicon\.ico
 - url: /.*
   script: _go_app
+- url: /worker/.*
+  script: _go_app
+  login: admin
 
 skip_files:
 - ^(.*/)?#.*#$

@@ -6,11 +6,13 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
 	"appengine"
 	"appengine/datastore"
+	"appengine/taskqueue"
 
 	"github.com/hpaluch/webmon-go/wm/wmmon"
 	"github.com/hpaluch/webmon-go/wm/wmutils"
@@ -145,15 +147,58 @@ func handlerCron(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var txt = ""
-	// our Cron job - monitor urls
-	for _, url := range mon_urls {
-		result, err := wmmon.MonitorAndStoreUrl(ctx, url)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		txt += fmt.Sprintf("Succes on %v\r\n", result)
+	// our Cron job - Enqueue tasks to Worker - each Url = one Task
+	for i, urlx := range mon_urls {
+		var task = taskqueue.NewPOSTTask("/worker", url.Values{
+				    "index": {strconv.Itoa(i)},
+		})
+                if _, err := taskqueue.Add(ctx, task, ""); err != nil {
+                        http.Error(w, err.Error(), http.StatusInternalServerError)
+                        return
+                }
+		txt += fmt.Sprintf("Enqueued task for url %s\r\n", urlx)
 	}
+	txt += fmt.Sprintf("Cron finished in %v\r\n", time.Since(tic))
+	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+	fmt.Fprintf(w, "%s", txt)
+
+}
+
+func handlerWorker(w http.ResponseWriter, r *http.Request) {
+	var tic = time.Now()
+	var ctx = appengine.NewContext(r)
+	wmutils.NoCacheHeaders(w)
+
+	const MY_PATH = "/worker"
+	if r.URL.Path != MY_PATH {
+		ctx.Errorf("Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
+		http.NotFound(w, r)
+		return
+	}
+
+	// url index
+	var iStr = r.FormValue("index")
+	i, err := strconv.Atoi(iStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if i < 0 || i >= len(mon_urls) {
+		http.Error(w, "url index out of range of MON_URLS",
+			 http.StatusInternalServerError)
+		return
+	}
+
+	// and finally run our worker job :-)
+	result, err := wmmon.MonitorAndStoreUrl(ctx, mon_urls[i])
+	if err != nil {
+		ctx.Errorf("Error running worker for url %s: %v", mon_urls[i], err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx.Infof("Finished worker on %v in %s",result,time.Since(tic))
+	var txt = fmt.Sprintf("Succes on worker %v\r\n", result)
 	txt += fmt.Sprintf("Job finished in %v\r\n", time.Since(tic))
 	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
 	fmt.Fprintf(w, "%s", txt)
@@ -186,5 +231,6 @@ func init() {
 	}
 
 	http.HandleFunc("/cron", handlerCron)
+	http.HandleFunc("/worker", handlerWorker)
 	http.HandleFunc("/", handlerList)
 }
