@@ -161,6 +161,10 @@ How to view traces:
 * than click on point in trace graph
 * you should now see detailed profile of your request
 
+# Bugs
+
+Interative mode may miss last entries from datastore (eventual constistency).
+This bug would be automatically fixed when using cron job.
 
 # Resources
 

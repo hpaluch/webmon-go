@@ -3,11 +3,13 @@ package wmmon
 
 
 import (
+	"crypto/md5"
 	"fmt"
 	"io/ioutil"
 	"time"
 
 	"appengine"
+	"appengine/datastore"
 	"appengine/urlfetch"
 )
 
@@ -59,4 +61,28 @@ func MonitorUrl(ctx appengine.Context, url string) MonResult{
 	}
 
 	return res
+}
+
+func EntityKind( url string ) string {
+	var bytes = []byte(url)
+	return fmt.Sprintf("%x",md5.Sum(bytes))
+}
+
+// monitor (fetch) specific url and stores it to datastore
+// NOTE: error is returned for datastore errors only
+func MonitorAndStoreUrl(ctx appengine.Context, url string) (MonResult,error) {
+	var result = MonitorUrl(ctx,url)
+
+	var entityKind = EntityKind(url)
+	ctx.Infof("EntityKind '%s'",entityKind)
+
+	// put results to datastore 
+	var key = datastore.NewIncompleteKey(ctx, entityKind, nil)
+	_, err := datastore.Put(ctx, key, &result)
+	if err != nil {
+		ctx.Errorf("Error on Put('%s'): %v",entityKind,err)
+		return result,err
+	}
+
+	return result,nil
 }

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"appengine"
+	"appengine/datastore"
 
 	"github.com/hpaluch/webmon-go/wm/wmmon"
 	"github.com/hpaluch/webmon-go/wm/wmutils"
@@ -83,9 +84,23 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 	for i,url := range mon_urls {
 
 		// in future this will be list of records from database
-		var results = make([]wmmon.MonResult,1)
+		_,err := wmmon.MonitorAndStoreUrl(ctx,url)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-		results[0] = wmmon.MonitorUrl(ctx,url)
+		var entityKind = wmmon.EntityKind(url)
+		q := datastore.NewQuery(entityKind).Order("-When").Limit(100)
+		var results []wmmon.MonResult
+		_, err = q.GetAll(ctx, &results)
+		if err != nil {
+			ctx.Errorf("Error fetchhing entities for '%s': %v",
+				url,err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+
+		}
 
 		var wd = WebData{
 			Url: url,
