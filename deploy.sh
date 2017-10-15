@@ -2,8 +2,21 @@
 
 cd `dirname $0`
 source _scripts/func.sh
+
+[ -n "$WEBMON_APP_ID" ] || {
+
+	echo "Variable WEBMON_APP_ID undefined"
+	echo "Set it to your PROJECT_ID in GAE and try again"
+	exit 1
+}
 gen_app_yaml
 set -e
+
+# set project id (grr!!!)
+set -x
+gcloud config set project $WEBMON_APP_ID
+set +x
+
 # check number of version (max 15)
 max_versions=2
 deployed_versions=$(gcloud app versions list | egrep -v '^SERVICE' | wc -l)

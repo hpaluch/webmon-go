@@ -98,10 +98,26 @@ Create new application in GAE Dashboard:
 
 For the first time you must register your Google Account to deploy app:
 
-* configure your project ID (in my case `hp-zolist`):
-```bash
-gcloud config set project YOUR_APP_ID
-```
+* configure your project ID (in my case `hp-webmon`)
+  in you shell set variable `WEBMON_APP_ID` to your
+  _Project ID_ you created in your GAE Dashboard.
+  For example I added to my `~/.bashrc`
+
+  ```bash
+export WEBMON_APP_ID=hp-webmon
+  ```
+
+  For the first time set app id manually:
+
+  ```bash
+gcloud config set project $WEBMON_APP_ID
+  ```
+
+* then create your App (for the 1st time only):
+
+  ```bash
+gcloud app create
+  ```
 
 * configure your Google Account for GAE:
 ```bash
