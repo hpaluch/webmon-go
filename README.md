@@ -105,6 +105,11 @@ Create new application in GAE Dashboard:
 * to view cute Admin interface (something like "Dashboard Lite")
   use: http://localhost:8000
 
+To  really monitor Urls you need to call `/cron` path, for example:
+```bash
+curl http://localhost:8080/cron
+```
+
 ## Deploying app
 
 For the first time you must register your Google Account to deploy app:

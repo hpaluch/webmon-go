@@ -1,0 +1,6 @@
+# Our cron job to monitor target Urls
+cron:
+- description: monitor Urls
+  url: /cron
+  schedule: every 30 minutes 
+

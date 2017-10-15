@@ -34,6 +34,7 @@ then
 fi
 set -x
 gcloud app deploy
+gcloud app deploy cron.yaml
 # please ignore "skipped"/"copied" messages before deployment
 # they have nothing common with Upload filter...
 #gcloud app deploy --verbosity=info

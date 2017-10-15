@@ -83,17 +83,10 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 	webData := make([]WebData,len(mon_urls))
 	for i,url := range mon_urls {
 
-		// in future this will be list of records from database
-		_,err := wmmon.MonitorAndStoreUrl(ctx,url)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 		var entityKind = wmmon.EntityKind(url)
 		q := datastore.NewQuery(entityKind).Order("-When").Limit(100)
 		var results []wmmon.MonResult
-		_, err = q.GetAll(ctx, &results)
+		var _, err = q.GetAll(ctx, &results)
 		if err != nil {
 			ctx.Errorf("Error fetchhing entities for '%s': %v",
 				url,err)
@@ -125,6 +118,39 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handlerCron(w http.ResponseWriter, r *http.Request) {
+
+	var tic = time.Now()
+	var ctx = appengine.NewContext(r)
+	wmutils.NoCacheHeaders(w)
+
+	const MY_PATH = "/cron"
+	if r.URL.Path != MY_PATH {
+		ctx.Errorf("Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
+		http.NotFound(w, r)
+		return
+	}
+
+	if !wmutils.VerifyGetMethod(ctx, w, r) {
+		return
+	}
+
+	var txt = ""
+	// our Cron job - monitor urls
+	for _,url := range mon_urls {
+		result,err := wmmon.MonitorAndStoreUrl(ctx,url)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		txt += fmt.Sprintf("Succes on %v\r\n",result)
+	}
+	txt += fmt.Sprintf("Job finished in %v\r\n", time.Since(tic))
+	w.Header().Set("Content-Type","text/plain; charset=UTF-8")
+	fmt.Fprintf(w,"%s",txt)
+
+}
+
 // main handler fo Go/GAE application
 func init() {
 	var err error
@@ -150,5 +176,6 @@ func init() {
 		}
 	}
 
+	http.HandleFunc("/cron", handlerCron)
 	http.HandleFunc("/", handlerList)
 }
