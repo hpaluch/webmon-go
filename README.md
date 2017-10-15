@@ -6,6 +6,9 @@ of your web pages.
 The app is written in Go for GAE.
 
 > WARNING! Work in progress - currently just skeleton
+>
+> Live demo is available at: https://hp-webmon.appspot.com/
+>
 
 ## Setup
 
@@ -87,9 +90,10 @@ Create new application in GAE Dashboard:
 ## Developing app
 
 * to run this app locally use:
-```bash
-./run_dev.sh
-```
+
+  ```bash
+  ./run_dev.sh
+  ```
 * and go to URL: http://localhost:8080/
 * to view cute Admin interface (something like "Dashboard Lite")
   use: http://localhost:8000
@@ -104,29 +108,31 @@ For the first time you must register your Google Account to deploy app:
   For example I added to my `~/.bashrc`
 
   ```bash
-export WEBMON_APP_ID=hp-webmon
+  export WEBMON_APP_ID=hp-webmon
   ```
 
   For the first time set app id manually:
 
   ```bash
-gcloud config set project $WEBMON_APP_ID
+  gcloud config set project $WEBMON_APP_ID
   ```
 
 * then create your App (for the 1st time only):
 
   ```bash
-gcloud app create
+  gcloud app create
   ```
 
 * configure your Google Account for GAE:
-```bash
-gcloud config set account YOUR_GOOGLE_ACCOUNT
-```
+
+  ```bash
+  gcloud config set account YOUR_GOOGLE_ACCOUNT
+  ```
 * login with your GAE account:
-```bash
-gcloud auth login
-```
+
+  ```bash
+  gcloud auth login
+  ```
 * new browser window should appear:
   * login or confirm selected account
   * allow required permissions for `Google Cloud SDK`
@@ -134,9 +140,10 @@ gcloud auth login
 
 And finally:
 * to deploy app run script:
-```bash
-./deploy.sh
-```
+
+  ```bash
+  ./deploy.sh
+  ```
 
 # Mis tips
 
@@ -153,7 +160,7 @@ How to view traces:
 I used many resources to write this program including
 (but no guarantee to be comprehensive!):
 
-Most of them come from my own App:
+Most of them come from my own App (see README.md ot ZoList for Resources):
 * ZoList written in Go for GAE:
   https://github.com/hpaluch/zolist-go 
 
