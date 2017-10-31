@@ -60,7 +60,11 @@ func MonitorUrl(ctx appengine.Context, url string) MonResult {
 	res.Length = len(body)
 
 	if resp.StatusCode != OkHttpStatus {
-		res.Err = fmt.Sprintf("URL '%s' returned unexpected status %d <> %d, body: %s", url, resp.Status, OkHttpStatus, body)
+		res.Err = fmt.Sprintf("URL '%s' returned unexpected status %d <> %d: '%s' Body: %s", url, resp.StatusCode, OkHttpStatus, resp.Status, body)
+		if len(res.Err) > wmconsts.DataStoreMaxStrLen {
+			const suffix = " ..."
+			res.Err = res.Err[0:(wmconsts.DataStoreMaxStrLen-len(suffix))] + suffix
+		}
 		return res
 	}
 
