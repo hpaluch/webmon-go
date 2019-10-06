@@ -5,7 +5,7 @@
 gen_app_yaml () {
 	# default Monitored URLs (
 	url1="https://www.henryx.info"
-	url2="https://henryx-info.000webhostapp.com"
+	url2="http://henryx.atwebpages.com/"
 	export MON_URLS="${MON_URLS:-$url1 $url2}"
 	{
 		echo "# DO NOT EDIT - Generated at `date`"
