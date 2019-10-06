@@ -1,5 +1,12 @@
 # WebMon - Monitor your Web Pages with Go/GAE
 
+> WARNING!
+>
+> Since Oct 1 2019 GAE for Go changed significantly.
+> See https://cloud.google.com/appengine/docs/standard/go111/go-differences
+> for overview of so many incompatibilites between go 1.9 and current 1.11)
+
+
 Here is a simple application to monitor latency and or errors
 of your web pages.
 
@@ -42,6 +49,13 @@ Install required components:
 
 * Tested OS: `Ubuntu 16.04.3 LTS`, `x86_64`
 
+* Now you need to install go 1.11 manually using these commands:
+
+  ```bash
+wget https://dl.google.com/go/go1.11.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.11.linux-amd64.tar.gz
+  ```
+
 * Install python 2.7 (or later 2.x) using:
 
   ```bash
@@ -65,6 +79,7 @@ tar xzf google-cloud-sdk-171.0.0-linux-x86_64.tar.gz -C /opt/gae
   for example add this to your `~/.bashrc`:
 
 ```bash
+export PATH=/usr/local/go/bin:$PATH
 export PATH=/opt/gae/google-cloud-sdk/bin:$PATH
 ```
 

@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"appengine"
+	"google.golang.org/appengine/log"
+	"golang.org/x/net/context"
 )
 
 func RoundDurationToMs(d time.Duration) time.Duration {
@@ -19,7 +20,7 @@ type LayoutModel struct {
 	Title      string
 }
 
-func CreateLayoutModel(tic time.Time, title string, ctx appengine.Context, r *http.Request) (LayoutModel, error) {
+func CreateLayoutModel(tic time.Time, title string, ctx context.Context, r *http.Request) (LayoutModel, error) {
 
 	return LayoutModel{
 		NowUTC:     time.Now(),
@@ -28,12 +29,12 @@ func CreateLayoutModel(tic time.Time, title string, ctx appengine.Context, r *ht
 	}, nil
 }
 
-func VerifyGetMethod(ctx appengine.Context, w http.ResponseWriter, r *http.Request) bool {
+func VerifyGetMethod(ctx context.Context, w http.ResponseWriter, r *http.Request) bool {
 
 	// how to trigger this error:
 	// curl -X POST -v http://localhost:8080
 	if r.Method != "GET" {
-		ctx.Errorf("Method '%s' not allowed for path '%s'",
+		log.Errorf(ctx, "Method '%s' not allowed for path '%s'",
 			r.Method, r.URL.Path)
 		http.Error(w, "Method not allowed",
 			http.StatusMethodNotAllowed)

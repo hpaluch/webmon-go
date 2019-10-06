@@ -7,11 +7,14 @@ import (
 	"io/ioutil"
 	"time"
 
-	"appengine"
-	"appengine/datastore"
-	"appengine/urlfetch"
+	"golang.org/x/net/context"
+
+	"google.golang.org/appengine/datastore"
+	"google.golang.org/appengine/urlfetch"
+	"google.golang.org/appengine/log"
 
 	"github.com/hpaluch/webmon-go/wm/wmconsts"
+
 )
 
 type MonResult struct {
@@ -25,7 +28,7 @@ type MonResult struct {
 
 // NOTE: we expect errors - we return them in structure...
 
-func MonitorUrl(ctx appengine.Context, url string) MonResult {
+func MonitorUrl(ctx context.Context, url string) MonResult {
 
 	var res = MonResult{
 		Url:        url,
@@ -78,17 +81,17 @@ func EntityKind(url string) string {
 
 // monitor (fetch) specific url and stores it to datastore
 // NOTE: error is returned for datastore errors only
-func MonitorAndStoreUrl(ctx appengine.Context, url string) (MonResult, error) {
+func MonitorAndStoreUrl(ctx context.Context, url string) (MonResult, error) {
 	var result = MonitorUrl(ctx, url)
 
 	var entityKind = EntityKind(url)
-	ctx.Infof("EntityKind '%s'", entityKind)
+	log.Infof(ctx, "EntityKind '%s'", entityKind)
 
 	// put results to datastore
 	var key = datastore.NewIncompleteKey(ctx, entityKind, nil)
 	_, err := datastore.Put(ctx, key, &result)
 	if err != nil {
-		ctx.Errorf("Error on Put('%s'): %v", entityKind, err)
+		log.Errorf(ctx, "Error on Put('%s'): %v", entityKind, err)
 		return result, err
 	}
 

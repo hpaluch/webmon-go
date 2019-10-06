@@ -1,4 +1,4 @@
-package zolist
+package main
 
 import (
 	"fmt"
@@ -10,9 +10,11 @@ import (
 	"strings"
 	"time"
 
-	"appengine"
-	"appengine/datastore"
-	"appengine/taskqueue"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/datastore"
+	"google.golang.org/appengine/taskqueue"
+
+	"google.golang.org/appengine/log"
 
 	"github.com/hpaluch/webmon-go/wm/wmmon"
 	"github.com/hpaluch/webmon-go/wm/wmutils"
@@ -73,7 +75,7 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 	// see https://github.com/GoogleCloudPlatform/golang-samples/blob/master/appengine_flexible/helloworld/helloworld.go
 	const MY_PATH = "/"
 	if r.URL.Path != MY_PATH {
-		ctx.Errorf("Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
+		log.Errorf(ctx, "Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
 		http.NotFound(w, r)
 		return
 	}
@@ -90,7 +92,7 @@ func handlerList(w http.ResponseWriter, r *http.Request) {
 		var results []wmmon.MonResult
 		var _, err = q.GetAll(ctx, &results)
 		if err != nil {
-			ctx.Errorf("Error fetchhing entities for '%s': %v",
+			log.Errorf(ctx, "Error fetchhing entities for '%s': %v",
 				url, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -127,7 +129,7 @@ func handlerCron(w http.ResponseWriter, r *http.Request) {
 
 	const MY_PATH = "/cron"
 	if r.URL.Path != MY_PATH {
-		ctx.Errorf("Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
+		log.Errorf(ctx, "Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
 		http.NotFound(w, r)
 		return
 	}
@@ -171,7 +173,7 @@ func handlerWorker(w http.ResponseWriter, r *http.Request) {
 
 	const MY_PATH = "/worker"
 	if r.URL.Path != MY_PATH {
-		ctx.Errorf("Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
+		log.Errorf(ctx, "Unexpected path '%s' <> '%s'", r.URL.Path, MY_PATH)
 		http.NotFound(w, r)
 		return
 	}
@@ -193,11 +195,11 @@ func handlerWorker(w http.ResponseWriter, r *http.Request) {
 	// and finally run our worker job :-)
 	result, err := wmmon.MonitorAndStoreUrl(ctx, mon_urls[i])
 	if err != nil {
-		ctx.Errorf("Error running worker for url %s: %v", mon_urls[i], err)
+		log.Errorf(ctx, "Error running worker for url %s: %v", mon_urls[i], err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	ctx.Infof("Finished worker on %v in %s", result, time.Since(tic))
+	log.Infof(ctx, "Finished worker on %v in %s", result, time.Since(tic))
 	var txt = fmt.Sprintf("Succes on worker %v\r\n", result)
 	txt += fmt.Sprintf("Job finished in %v\r\n", time.Since(tic))
 	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
@@ -233,4 +235,8 @@ func init() {
 	http.HandleFunc("/cron", handlerCron)
 	http.HandleFunc("/worker", handlerWorker)
 	http.HandleFunc("/", handlerList)
+}
+
+func main() {
+	appengine.Main()
 }

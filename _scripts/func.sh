@@ -25,5 +25,6 @@ gen_app_yaml () {
 }
 
 # point GOPATH to over src/github.com/hpaluch/webmon-go
-export GOPATH=../../../../
+# NOTE: recent go versions (1.11) forbids relative path...
+export GOPATH=$(realpath ../../../../)
 
