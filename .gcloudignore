@@ -1,0 +1,10 @@
+# .gcloudignore - required from go 1.11 runtime
+*.swp
+*~
+*.md
+*.sh
+.gitignore
+.git/
+_scripts/
+app.yaml.template
+
