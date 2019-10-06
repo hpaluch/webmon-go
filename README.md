@@ -5,6 +5,18 @@
 > Since Oct 1 2019 GAE for Go changed significantly.
 > See https://cloud.google.com/appengine/docs/standard/go111/go-differences
 > for overview of so many incompatibilites between go 1.9 and current 1.11)
+>
+> IMPORTANT!
+>
+> According to https://cloud.google.com/appengine/docs/standard/go111/quickstart
+> 
+> > Make sure billing is enabled for your project. A billing
+> > account needs to be linked to your project in order
+> > for the application to be deployed to App Engine.
+>
+> I have no plan to enable billing (it was main reason to use GAE, even
+> when there is strong vendor-locking). Therefore _I no longer can verify
+> that this project still works. Sorry._
 
 
 Here is a simple application to monitor latency and or errors
